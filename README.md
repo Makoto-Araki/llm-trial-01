@@ -1,4 +1,4 @@
-# llm-trial-01 LLM-MCP 試作01
+# llm-trial-01 LLM試作01
 
 ## 前提条件
 - Ubuntu Serverインストール済みのPC用意
