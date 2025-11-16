@@ -1,4 +1,4 @@
-# llm-mcp-01 LLM-MCP 試作01
+# llm-trial-01 LLM-MCP 試作01
 
 ## 前提条件
 - Ubuntu Serverインストール済みのPC用意
@@ -174,22 +174,22 @@ $ sudo apt upgrade -y
 
 ## ワークスペース作成
 $ cd ~
-$ mkdir -p ~/llm-mcp-01
+$ mkdir -p ~/llm-trial-01
 
 ## デーモンをインストール
-$ cd ~/llm-mcp-01
+$ cd ~/llm-trial-01
 $ curl -fsSL https://ollama.com/install.sh | sh
 
 ## デーモンの状態確認
-$ cd ~/llm-mcp-01
+$ cd ~/llm-trial-01
 $ systemctl is-active ollama
 
 ## LLM(qwen2.5:3b)のモデル取得
-$ cd ~/llm-mcp-01
+$ cd ~/llm-trial-01
 $ ollama pull qwen2.5:3b
 
 ## モデルのテスト
-$ cd ~/llm-mcp-01
+$ cd ~/llm-trial-01
 $ ollama run qwen2.5:3b
 
 コマンドの実行結果
@@ -215,15 +215,15 @@ Available Commands:
 --------------------------------------------------
 
 ## MySQL Serverのインストール
-$ cd ~/llm-mcp-01
+$ cd ~/llm-trial-01
 $ sudo apt install -y mysql-server
 
 ## MySQL Serverのrootパスワード設定
-$ cd ~/llm-mcp-01
+$ cd ~/llm-trial-01
 $ sudo mysql_secure_installation
 
 ## MySQL Serverに接続
-$ cd ~/llm-mcp-01
+$ cd ~/llm-trial-01
 $ sudo mysql -u root -p  // パスワードを Bg#0122$Zh9344ph7522 とした
 
 ## データベース作成
@@ -266,23 +266,23 @@ SQL>
 SQL> EXIT
 
 ## Pythonのインストール
-$ cd ~/llm-mcp-01
+$ cd ~/llm-trial-01
 $ sudo apt install -y python3 python3-pip python3-venv
 
 ## Pythonの仮想環境を構築
-$ cd ~/llm-mcp-01
+$ cd ~/llm-trial-01
 $ python3 -m venv venv
 
 ## Pythonの仮想環境を起動
-$ cd ~/llm-mcp-01
+$ cd ~/llm-trial-01
 $ source venv/bin/activate
 
 ## PythonでMySQL接続用のパッケージをインストール
-$ cd ~/llm-mcp-01
+$ cd ~/llm-trial-01
 $ pip install mysql-connector-python requests
 
 ## プログラム実装
-$ cd ~/llm-mcp-01
+$ cd ~/llm-trial-01
 $ vi main.py
 
 コマンドの実行結果
@@ -370,7 +370,7 @@ if __name__ == "__main__":
 --------------------------------------------------
 
 ## プログラム実行
-$ cd ~/llm-mcp-01
+$ cd ~/llm-trial-01
 $ python3 main.py
 
 コマンドの実行結果
@@ -388,19 +388,19 @@ AI回答
 --------------------------------------------------
 
 ## Pythonの仮想環境を終了
-$ cd ~/llm-mcp-01
+$ cd ~/llm-trial-01
 $ deactivate
 
 ## MySQL Serverの停止
-$ cd ~/llm-mcp-01
+$ cd ~/llm-trial-01
 $ sudo systemctl stop mysql
 
 ## Ollamaの停止
-$ cd ~/llm-mcp-01
+$ cd ~/llm-trial-01
 $ sudo systemctl stop ollama
 
 ## LLMホスト離脱
-$ cd ~/llm-mcp-01
+$ cd ~/llm-trial-01
 $ exit
 ```
 
