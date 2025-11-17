@@ -469,13 +469,17 @@ SQL結果: [{'id': '0003', 'name': '田中一郎', 'department': '開発', 'sala
 $ cd ~/llm-trial-01
 $ deactivate
 
-## MySQL Serverの停止
+## MySQL Serverの停止 ※LLMホストのシャットダウン時に実行
 $ cd ~/llm-trial-01
 $ sudo systemctl stop mysql
 
-## Ollamaの停止
+## Ollamaの停止 ※LLMホストのシャットダウン時に実行
 $ cd ~/llm-trial-01
 $ sudo systemctl stop ollama
+
+## 10分後にシャットダウン設定 ※LLMホストのシャットダウン時に実行
+$ cd ~/llm-trial-01
+$ sudo shutdown -h 10
 
 ## LLMホスト離脱
 $ cd ~/llm-trial-01
