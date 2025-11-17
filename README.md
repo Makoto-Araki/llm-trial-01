@@ -1,4 +1,4 @@
-# llm-trial-01 LLM試作01
+# llm-trial-01 LLM-試作-01
 
 ## 前提条件
 - Ubuntu Serverインストール済みのPC用意
@@ -140,11 +140,11 @@ rtt min/avg/max/mdev = 5.148/5.666/6.584/0.650 ms
 | 70B         | ✕   | 無理                        |
 
 ### 評価 (ChatGPT)
-- MCPでMySQL連携する用途なら3Bでも十分
+- LLMとMySQL連携する用途なら3Bでも十分
 
 ### CPU向けのモデル候補 (ChatGPT)
 - Qwen2.5
-  - 1.8B / 3B / 7B（推奨）
+  - 1.8B / 3B (推奨) / 7B
   - 最新の高性能モデル
   - CPUでも軽い
 - Llama3.2
@@ -157,7 +157,7 @@ rtt min/avg/max/mdev = 5.148/5.666/6.584/0.650 ms
   - ただし日本語弱め
 
 ## LLMホスト性能判定
-- LLMとMySQLをMCPで連携可能
+- LLMとMySQLを連携可能
   - PC性能は最低ラインをクリア
   - PoC(社内利用の小規模テスト)なら問題なし
   - qwen2.5:3b（ChatGPT推奨）
@@ -317,6 +317,7 @@ def ask_llm(prompt: str):
 
 """ 3. LLMにSQL生成させる
 """
+
 def generate_sql(question: str):
     prompt = f"""
 あなたはSQL生成AIです。
@@ -333,6 +334,7 @@ def generate_sql(question: str):
 
 """ 4. SQLをDBで実行
 """
+
 def run_sql(sql: str):
     cursor.execute(sql)
     rows = cursor.fetchall()
@@ -340,6 +342,7 @@ def run_sql(sql: str):
 
 """ 5. 結果を自然言語で要約する
 """
+
 def summarize(rows):
     prompt = f"""
 次のデータを分かりやすく説明してください。
@@ -351,6 +354,7 @@ def summarize(rows):
 
 """ 6. メイン処理
 """
+
 def main():
     print("質問を入力してください：")
     question = input("> ")
