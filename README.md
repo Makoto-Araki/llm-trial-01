@@ -253,6 +253,14 @@ SQL> INSERT INTO employees (id, name, department, salary) VALUES ('0003', '田�
 SQL> 
 SQL> SELECT * FROM employees ;
 
+コマンドの実行結果
+--------------------------------------------------
+| id   | name        | department | salary |
+| 0001 | 山田太郎     | 営業       | 450000 |
+| 0002 | 佐藤花子     | 総務       | 250000 |
+| 0003 | 田中一郎     | 開発       | 350000 |
+--------------------------------------------------
+
 ## rootユーザーの接続設定を変更
 SQL> 
 SQL> ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Bg#0122$Zh9344ph7522' ;
@@ -407,7 +415,9 @@ $ python3 main.py
 生成されたSQL:
 SELECT name FROM employees WHERE department = '営業';
 
-SQL結果: [{'name': '山田太郎'}]
+SQL結果: [
+    {'name': '山田太郎'}
+]
 
 AI回答
 このデータは、一人の名前だけが含まれています。名前の部分のみで、山田太郎という人物に関する情報しか提供されていません。
@@ -425,7 +435,10 @@ $ python3 main.py
 生成されたSQL:
 SELECT * FROM employees WHERE salary > 300000;
 
-SQL結果: [{'id': '0001', 'name': '山田太郎', 'department': '営業', 'salary': 450000}, {'id': '0003', 'name': '田中一郎', 'department': '開発', 'salary': 350000}]
+SQL結果: [
+    {'id': '0001', 'name': '山田太郎', 'department': '営業', 'salary': 450000}, 
+    {'id': '0003', 'name': '田中一郎', 'department': '開発', 'salary': 350000}
+]
 
 --- AI回答 ---
 このデータは、営業部門と開発部門に属する2人の雇用者の情報をまとめたものです。
@@ -453,7 +466,9 @@ $ python3 main.py
 生成されたSQL:
 SELECT * FROM employees WHERE name LIKE '田中%';
 
-SQL結果: [{'id': '0003', 'name': '田中一郎', 'department': '開発', 'salary': 350000}]
+SQL結果: [
+    {'id': '0003', 'name': '田中一郎', 'department': '開発', 'salary': 350000}
+]
 
 --- AI回答 ---
 このデータは、特定の従業員に関する情報をまとめたものです。その情報を簡単に説明します。
@@ -486,3 +501,357 @@ $ cd ~/llm-trial-01
 $ exit
 ```
 
+## 複数テーブル対応
+```bash
+## MySQL Serverに接続
+$ cd ~/llm-trial-01
+$ sudo mysql -u root -p  // パスワードは Bg#0122$Zh9344ph7522 で設定してある
+
+## 使用データベース設定
+SQL> 
+SQL> USE mydatabase ;
+
+## テーブル削除
+SQL> 
+SQL> DROP TABLE employees ;
+
+## テーブル作成
+SQL> 
+SQL> CREATE TABLE employees (
+    id VARCHAR(4) PRIMARY KEY,
+    name VARCHAR(50),
+    department_id VARCHAR(2),
+    salary INT
+) ;
+
+## レコード登録
+SQL> 
+SQL> INSERT INTO employees (id, name, department_id, salary) VALUES ('0001', '織田信長', 'D1', 450000) ;
+SQL> INSERT INTO employees (id, name, department_id, salary) VALUES ('0002', '羽柴秀吉', 'D3', 350000) ;
+SQL> INSERT INTO employees (id, name, department_id, salary) VALUES ('0003', '柴田勝家', 'D3', 350000) ;
+SQL> INSERT INTO employees (id, name, department_id, salary) VALUES ('0004', '滝川一益', 'D3', 350000) ;
+SQL> INSERT INTO employees (id, name, department_id, salary) VALUES ('0005', '丹羽長秀', 'D2', 250000) ;
+SQL> INSERT INTO employees (id, name, department_id, salary) VALUES ('0006', '明智光秀', 'D2', 250000) ;
+SQL> INSERT INTO employees (id, name, department_id, salary) VALUES ('0007', '上杉景勝', 'D1', 450000) ;
+SQL> INSERT INTO employees (id, name, department_id, salary) VALUES ('0008', '毛利輝元', 'D1', 450000) ;
+SQL> INSERT INTO employees (id, name, department_id, salary) VALUES ('0009', '島津義弘', 'D1', 450000) ;
+SQL> INSERT INTO employees (id, name, department_id, salary) VALUES ('0010', '松永久秀', 'D3', 350000) ;
+SQL> INSERT INTO employees (id, name, department_id, salary) VALUES ('0011', '伊達政宗', 'D3', 350000) ;
+SQL> INSERT INTO employees (id, name, department_id, salary) VALUES ('0012', '荒木村重', 'D3', 350000) ;
+SQL> INSERT INTO employees (id, name, department_id, salary) VALUES ('0013', '佐々成正', 'D2', 250000) ;
+SQL> INSERT INTO employees (id, name, department_id, salary) VALUES ('0014', '織田信忠', 'D2', 250000) ;
+SQL> INSERT INTO employees (id, name, department_id, salary) VALUES ('0015', '前田玄以', 'D2', 250000) ;
+SQL> INSERT INTO employees (id, name, department_id, salary) VALUES ('0016', '真田幸村', 'D2', 250000) ;
+SQL> INSERT INTO employees (id, name, department_id, salary) VALUES ('0017', '前田利家', 'D3', 350000) ;
+SQL> INSERT INTO employees (id, name, department_id, salary) VALUES ('0018', '前田慶次', 'D2', 250000) ;
+SQL> INSERT INTO employees (id, name, department_id, salary) VALUES ('0019', '服部半蔵', 'D2', 250000) ;
+SQL> INSERT INTO employees (id, name, department_id, salary) VALUES ('0020', '結城秀康', 'D3', 350000) ;
+
+## レコード確認
+SQL> 
+SQL> SELECT * FROM employees ;
+
+コマンドの実行結果
+--------------------------------------------------
+| id   | name        | department_id | salary |
+| 0001 | 織田信長     | D1            | 450000 |
+| 0002 | 羽柴秀吉     | D3            | 350000 |
+| 0003 | 柴田勝家     | D3            | 350000 |
+| 0004 | 滝川一益     | D3            | 350000 |
+| 0005 | 丹羽長秀     | D2            | 250000 |
+| 0006 | 明智光秀     | D2            | 250000 |
+| 0007 | 上杉景勝     | D1            | 450000 |
+| 0008 | 毛利輝元     | D1            | 450000 |
+| 0009 | 島津義弘     | D1            | 450000 |
+| 0010 | 松永久秀     | D3            | 350000 |
+| 0011 | 伊達政宗     | D3            | 350000 |
+| 0012 | 荒木村重     | D3            | 350000 |
+| 0013 | 佐々成正     | D2            | 250000 |
+| 0014 | 織田信忠     | D2            | 250000 |
+| 0015 | 前田玄以     | D2            | 250000 |
+| 0016 | 真田幸村     | D2            | 250000 |
+| 0017 | 前田利家     | D3            | 350000 |
+| 0018 | 前田慶次     | D2            | 250000 |
+| 0019 | 服部半蔵     | D2            | 250000 |
+| 0020 | 結城秀康     | D3            | 350000 |
+--------------------------------------------------
+
+## テーブル作成
+SQL> 
+SQL> CREATE TABLE departments (
+    id VARCHAR(2) PRIMARY KEY,
+    department_name VARCHAR(50)
+) ;
+
+## レコード登録
+SQL> 
+SQL> INSERT INTO departments (id, department_name) VALUES ('D1', '営業') ;
+SQL> INSERT INTO departments (id, department_name) VALUES ('D2', '総務') ;
+SQL> INSERT INTO departments (id, department_name) VALUES ('D3', '開発') ;
+
+## レコード確認
+SQL> 
+SQL> SELECT * FROM departments ;
+
+コマンドの実行結果
+--------------------------------------------------
+| id | department_name |
+| D1 | 営業            |
+| D2 | 総務            |
+| D3 | 開発            |
+--------------------------------------------------
+
+## MySQLサーバーから離脱
+SQL> 
+SQL> EXIT
+
+## Pythonの仮想環境を起動
+$ cd ~/llm-trial-01
+$ source venv/bin/activate
+
+## プログラム実装
+$ cd ~/llm-trial-01
+$ vi main.py
+
+コマンドの実行結果
+--------------------------------------------------
+import requests
+import mysql.connector
+import json
+
+""" 1. MySQL Server 接続設定
+"""
+
+db = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="Bg#0122$Zh9344ph7522",
+    database="mydatabase"
+)
+cursor = db.cursor(dictionary=True)
+
+""" 2. LLM(Ollama) へ質問送信
+"""
+
+def ask_llm(prompt: str):
+    url = "http://localhost:11434/api/generate"
+    payload = {
+        "model": "qwen2.5:3b",
+        "prompt": prompt,
+        "stream": False
+    }
+    res = requests.post(url, json=payload)
+    return res.json()["response"]
+
+""" 3. LLMにSQL生成させる
+"""
+
+def generate_sql(question: str):
+    prompt = f"""
+あなたは優秀なデータエンジニアです。
+以下の複数テーブル定義に基づいて、最適な SQL を1本だけ生成してください。
+
+【テーブル定義】
+employees (
+    id VARCHAR(4) PRIMARY KEY,
+    name VARCHAR(50),
+    department_id VARCHAR(2),
+    salary INT
+)
+
+departments (
+    id VARCHAR(2) PRIMARY KEY,
+    department_name VARCHAR(50),
+)
+
+【リレーション】
+employees.department_id = departments.id  
+
+【重要ルール】
+- 出力は SQL 文のみ。説明は禁止。
+- SQL の末尾には必ずセミコロンを付ける。
+- JOIN を使う際は、リレーション定義に基づくこと。
+- 曖昧な質問は SELECT ベースで解釈する。
+- データ変更系（UPDATE/DELETE/INSERT）は禁止。
+- 不明確な質問は、最も自然な SELECT 文を生成。
+- employees.nameには日本語のデータが入力。
+- department_nameには日本語のデータが入力。
+
+【質問】
+{question}
+
+上記ルールに従った SQL 文のみ返してください。
+"""
+    sql = ask_llm(prompt)
+    return sql.strip()
+
+""" 4. SQLをDBで実行
+"""
+
+def run_sql(sql: str):
+    cursor.execute(sql)
+    rows = cursor.fetchall()
+    return rows
+
+""" 5. 結果を自然言語で要約する
+"""
+
+def summarize(rows):
+    prompt = f"""
+次のデータを分かりやすく説明してください。
+
+データ:
+{json.dumps(rows, ensure_ascii=False, indent=2)}
+"""
+    return ask_llm(prompt)
+
+""" 6. メイン処理
+"""
+
+def main():
+    print("質問を入力してください：")
+    question = input("> ")
+
+    sql = generate_sql(question)
+    print(f"\n生成されたSQL:\n{sql}\n")
+
+    rows = run_sql(sql)
+    print("SQL結果:", rows)
+
+    summary = summarize(rows)
+    print("\n--- AI回答 ---")
+    print(summary)
+
+if __name__ == "__main__":
+    main()
+--------------------------------------------------
+
+## プログラム実行
+$ cd ~/llm-trial-01
+$ python3 main.py
+
+コマンドの実行結果
+--------------------------------------------------
+質問を入力してください：
+> 上杉景勝の所属部署を教えて下さい
+
+生成されたSQL:
+SELECT e.name, d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.id
+WHERE e.name = '上杉景勝';
+
+SQL結果: [
+    {'name': '上杉景勝', 'department_name': '営業'}
+]
+
+--- AI回答 ---
+このデータは、一人の社員の情報についてまとめています。彼女の名前は「上杉景勝」で、現在所属している部署は「営業」という部門です。
+
+簡単に説明すると、
+- 名前：上杉景勝
+- 部署：営業部门
+
+ということになります。
+--------------------------------------------------
+
+## プログラム実行
+$ cd ~/llm-trial-01
+$ python3 main.py
+
+コマンドの実行結果
+--------------------------------------------------
+質問を入力してください：
+> 所属部署が開発の社員名一覧を出してください
+
+生成されたSQL:
+SELECT employees.name, departments.department_name
+FROM employees
+JOIN departments
+ON employees.department_id = departments.id
+WHERE departments.department_name LIKE '%開発%';
+
+SQL結果: [
+    {'name': '羽柴秀吉', 'department_name': '開発'}, 
+    {'name': '柴田勝家', 'department_name': '開発'}, 
+    {'name': '滝川一益', 'department_name': '開発'}, 
+    {'name': '松永久秀', 'department_name': '開発'}, 
+    {'name': '伊達政宗', 'department_name': '開発'}, 
+    {'name': '荒木村重', 'department_name': '開発'}, 
+    {'name': '前田利家', 'department_name': '開発'}, 
+    {'name': '結城秀康', 'department_name': '開発'}
+]
+
+--- AI回答 ---
+これらのデータは、特定のプロジェクトまたは組織内で働く人々のリストです。彼らはすべて"開発"部門に所属しています。
+
+名前と所属部署を以下のようにまとめました：
+
+1. 羽柴秀吉 - 開発部門
+2. 柴田勝家 - 開発部門
+3. 滝川一益 - 開発部門
+4. 松永久秀 - 開発部門
+5. 伊達政宗 - 開発部門
+6. 荒木村重 - 開発部門
+7. 前田利家 - 開発部門
+8. 结城秀康 - 開発部門
+
+これらの人物は、おそらく一つのプロジェクトチームや組織内で働くメンバーで、すべてが"開発"という役割を担っています。
+--------------------------------------------------
+
+## プログラム実行
+$ cd ~/llm-trial-01
+$ python3 main.py
+
+コマンドの実行結果
+--------------------------------------------------
+質問を入力してください：
+> 社員の給料を所属部署でグループ化して各グループの最大値を求めて下さい
+
+生成されたSQL:
+SELECT departments.department_name, MAX(employees.salary) AS max_salary
+FROM employees
+JOIN departments ON employees.department_id = departments.id
+GROUP BY departments.department_name;
+
+SQL結果: [
+    {'department_name': '営業', 'max_salary': 450000}, 
+    {'department_name': '開発', 'max_salary': 350000}, 
+    {'department_name': '総務', 'max_salary': 250000}
+]
+
+--- AI回答 ---
+これらのデータは、異なる部門の給与上限を示しています。以下に詳細説明します：
+
+1. 営業部門：
+   最高の給与額は45万円です。
+
+2. 開発部門：
+   最高の給与額は35万円です。
+
+3. 総務部門：
+   最高の給与額は25万円です。
+
+このデータから、各部門での最高の給与がどのように設定されているかを簡単に理解できます。
+--------------------------------------------------
+
+## Pythonの仮想環境を終了
+$ cd ~/llm-trial-01
+$ deactivate
+
+## MySQL Serverの停止 ※LLMホストのシャットダウン時に実行
+$ cd ~/llm-trial-01
+$ sudo systemctl stop mysql
+
+## Ollamaの停止 ※LLMホストのシャットダウン時に実行
+$ cd ~/llm-trial-01
+$ sudo systemctl stop ollama
+
+## 10分後にシャットダウン設定 ※LLMホストのシャットダウン時に実行
+$ cd ~/llm-trial-01
+$ sudo shutdown -h 10
+
+## LLMホスト離脱
+$ cd ~/llm-trial-01
+$ exit
+```
