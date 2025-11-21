@@ -1,13 +1,14 @@
-# llm-trial-01 LLM-試作-01
+# llm-trial-02 LLM-試作-02
 
 ## 前提条件
 - Ubuntu Serverインストール済みのPC用意
 - Ubuntu ServerにSSH接続
-- 今回は試作のためMCPを使用せずLLMからSQL生成、生成SQLをMySQLで実行、MySQLからの回答取得、回答をLLMに返す方式で実装
+- 今回はMCPを使用する構成
 
 ## 処理概要
 1. 質問をLLMに入力
 1. LLMからSQL生成
+1. 生成SQLをMCPサーバーに
 1. 生成SQLをMySQLに実行、回答を取得
 1. 回答がLLMに返される
 1. LLMが回答を生成
@@ -170,22 +171,22 @@ $ sudo apt upgrade -y
 
 ## ワークスペース作成
 $ cd ~
-$ mkdir -p ~/llm-trial-01
+$ mkdir -p ~/llm-trial-02
 
 ## デーモンをインストール
-$ cd ~/llm-trial-01
+$ cd ~/llm-trial-02
 $ curl -fsSL https://ollama.com/install.sh | sh
 
 ## デーモンの状態確認
-$ cd ~/llm-trial-01
+$ cd ~/llm-trial-02
 $ systemctl is-active ollama
 
 ## LLM(qwen2.5:3b)のモデル取得
-$ cd ~/llm-trial-01
+$ cd ~/llm-trial-02
 $ ollama pull qwen2.5:3b
 
 ## モデルのテスト
-$ cd ~/llm-trial-01
+$ cd ~/llm-trial-02
 $ ollama run qwen2.5:3b
 
 コマンドの実行結果
@@ -211,15 +212,15 @@ Available Commands:
 --------------------------------------------------
 
 ## MySQL Serverのインストール
-$ cd ~/llm-trial-01
+$ cd ~/llm-trial-02
 $ sudo apt install -y mysql-server
 
 ## MySQL Serverのrootパスワード設定
-$ cd ~/llm-trial-01
+$ cd ~/llm-trial-02
 $ sudo mysql_secure_installation
 
 ## MySQL Serverに接続
-$ cd ~/llm-trial-01
+$ cd ~/llm-trial-02
 $ sudo mysql -u root -p  // パスワードを Bg#0122$Zh9344ph7522 とした
 
 ## データベース作成
@@ -270,27 +271,27 @@ SQL>
 SQL> EXIT
 
 ## Pythonのインストール
-$ cd ~/llm-trial-01
+$ cd ~/llm-trial-02
 $ sudo apt update
 
 ## Pythonのインストール
-$ cd ~/llm-trial-01
+$ cd ~/llm-trial-02
 $ sudo apt install -y python3 python3-full python3-pip python3-venv
 
 ## Pythonの仮想環境を構築
-$ cd ~/llm-trial-01
+$ cd ~/llm-trial-02
 $ python3 -m venv venv
 
 ## Pythonの仮想環境を起動
-$ cd ~/llm-trial-01
+$ cd ~/llm-trial-02
 $ source venv/bin/activate
 
 ## PythonでMySQL接続用のパッケージをインストール
-$ cd ~/llm-trial-01
+$ cd ~/llm-trial-02
 $ pip install mysql-connector-python requests
 
 ## プログラム実装
-$ cd ~/llm-trial-01
+$ cd ~/llm-trial-02
 $ vi main.py
 
 コマンドの実行結果
@@ -400,7 +401,7 @@ if __name__ == "__main__":
 --------------------------------------------------
 
 ## プログラム実行
-$ cd ~/llm-trial-01
+$ cd ~/llm-trial-02
 $ python3 main.py
 
 コマンドの実行結果
@@ -420,7 +421,7 @@ AI回答
 --------------------------------------------------
 
 ## プログラム実行
-$ cd ~/llm-trial-01
+$ cd ~/llm-trial-02
 $ python3 main.py
 
 コマンドの実行結果
@@ -451,7 +452,7 @@ SQL結果: [
 --------------------------------------------------
 
 ## プログラム実行
-$ cd ~/llm-trial-01
+$ cd ~/llm-trial-02
 $ python3 main.py
 
 コマンドの実行結果
@@ -477,30 +478,30 @@ SQL結果: [
 以上の情報をまとめると、「ID」が"0003"の田中一郎さんは開発部門に所属し、毎月約35万円の給与を受けているという内容になります。--------------------------------------------------
 
 ## Pythonの仮想環境を終了
-$ cd ~/llm-trial-01
+$ cd ~/llm-trial-02
 $ deactivate
 
 ## MySQL Serverの停止 ※ホストのシャットダウン時に実行
-$ cd ~/llm-trial-01
+$ cd ~/llm-trial-02
 $ sudo systemctl stop mysql
 
 ## Ollamaの停止 ※ホストのシャットダウン時に実行
-$ cd ~/llm-trial-01
+$ cd ~/llm-trial-02
 $ sudo systemctl stop ollama
 
 ## 10分後にシャットダウン設定 ※ホストのシャットダウン時に実行
-$ cd ~/llm-trial-01
+$ cd ~/llm-trial-02
 $ sudo shutdown -h 10
 
 ## ホスト離脱
-$ cd ~/llm-trial-01
+$ cd ~/llm-trial-02
 $ exit
 ```
 
 ## 複数テーブル対応
 ```bash
 ## MySQL Serverに接続
-$ cd ~/llm-trial-01
+$ cd ~/llm-trial-02
 $ sudo mysql -u root -p  // パスワードは Bg#0122$Zh9344ph7522 で設定してある
 
 ## 使用データベース設定
@@ -602,11 +603,11 @@ SQL>
 SQL> EXIT
 
 ## Pythonの仮想環境を起動
-$ cd ~/llm-trial-01
+$ cd ~/llm-trial-02
 $ source venv/bin/activate
 
 ## プログラム実装
-$ cd ~/llm-trial-01
+$ cd ~/llm-trial-02
 $ vi main.py
 
 コマンドの実行結果
@@ -723,7 +724,7 @@ if __name__ == "__main__":
 --------------------------------------------------
 
 ## プログラム実行
-$ cd ~/llm-trial-01
+$ cd ~/llm-trial-02
 $ python3 main.py
 
 コマンドの実行結果
@@ -752,7 +753,7 @@ SQL結果: [
 --------------------------------------------------
 
 ## プログラム実行
-$ cd ~/llm-trial-01
+$ cd ~/llm-trial-02
 $ python3 main.py
 
 コマンドの実行結果
@@ -796,7 +797,7 @@ SQL結果: [
 --------------------------------------------------
 
 ## プログラム実行
-$ cd ~/llm-trial-01
+$ cd ~/llm-trial-02
 $ python3 main.py
 
 コマンドの実行結果
@@ -832,22 +833,22 @@ SQL結果: [
 --------------------------------------------------
 
 ## Pythonの仮想環境を終了
-$ cd ~/llm-trial-01
+$ cd ~/llm-trial-02
 $ deactivate
 
 ## MySQL Serverの停止 ※ホストのシャットダウン時に実行
-$ cd ~/llm-trial-01
+$ cd ~/llm-trial-02
 $ sudo systemctl stop mysql
 
 ## Ollamaの停止 ※ホストのシャットダウン時に実行
-$ cd ~/llm-trial-01
+$ cd ~/llm-trial-02
 $ sudo systemctl stop ollama
 
 ## 10分後にシャットダウン設定 ※ホストのシャットダウン時に実行
-$ cd ~/llm-trial-01
+$ cd ~/llm-trial-02
 $ sudo shutdown -h 10
 
 ## ホスト離脱
-$ cd ~/llm-trial-01
+$ cd ~/llm-trial-02
 $ exit
 ```
