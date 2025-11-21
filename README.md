@@ -3,17 +3,16 @@
 ## 前提条件
 - Ubuntu Serverインストール済みのPC用意
 - Ubuntu ServerにSSH接続
-- 今回は試作かつPythonでは公式のMCPのSDKが無いため、LLMからSQL生成、MySQLから回答取得、回答をLLMに返す方式で実装
+- 今回は試作のためMCPを使用せずLLMからSQL生成、生成SQLをMySQLで実行、MySQLからの回答取得、回答をLLMに返す方式で実装
 
 ## 処理概要
 1. 質問をLLMに入力
 1. LLMからSQL生成
 1. 生成SQLをMySQLに実行、回答を取得
 1. 回答がLLMに返される
+1. LLMが回答を生成
 
-## LLMホスト性能確認
-
-### LLMホスト性能確認
+## ホスト性能確認
 ```bash
 ## OS確認
 $ cd ~
@@ -122,7 +121,7 @@ rtt min/avg/max/mdev = 5.148/5.666/6.584/0.650 ms
 --------------------------------------------------
 ```
 
-### スペック判定 (ChatGPT)
+## ホストのスペック判定 (ChatGPT)
 | 項目                                    | 判定              |
 | --------------------------------------- | ---------------- |
 | OS：Ubuntu 24.04                        | OK               |
@@ -131,7 +130,7 @@ rtt min/avg/max/mdev = 5.148/5.666/6.584/0.650 ms
 | SSD：80GB 空き                           | OK               |
 | ネットワーク：問題なし                    | OK               |
 
-### 搭載CPUで動作可能なLLM一覧 (ChatGPT)
+## ホストの搭載CPUで動作可能なLLM一覧 (ChatGPT)
 | モデルサイズ | 可否 | 備考                        |
 | ----------- | ---- | -------------------------- |
 | 1.8B        | ◎   | サクサク動く                |
@@ -139,10 +138,7 @@ rtt min/avg/max/mdev = 5.148/5.666/6.584/0.650 ms
 | 13B         | △   | 実質厳しい（数十秒〜数分応答）|
 | 70B         | ✕   | 無理                        |
 
-### 評価 (ChatGPT)
-- LLMとMySQL連携する用途なら3Bでも十分
-
-### CPU向けのモデル候補 (ChatGPT)
+## ホストのCPU向けのモデル候補 (ChatGPT)
 - Qwen2.5
   - 1.8B / 3B (推奨) / 7B
   - 最新の高性能モデル
@@ -156,7 +152,7 @@ rtt min/avg/max/mdev = 5.148/5.666/6.584/0.650 ms
   - とても軽い
   - ただし日本語弱め
 
-## LLMホスト性能判定
+## ホスト性能判定
 - LLMとMySQLを連携可能
   - PC性能は最低ラインをクリア
   - PoC(社内利用の小規模テスト)なら問題なし
@@ -484,19 +480,19 @@ SQL結果: [
 $ cd ~/llm-trial-01
 $ deactivate
 
-## MySQL Serverの停止 ※LLMホストのシャットダウン時に実行
+## MySQL Serverの停止 ※ホストのシャットダウン時に実行
 $ cd ~/llm-trial-01
 $ sudo systemctl stop mysql
 
-## Ollamaの停止 ※LLMホストのシャットダウン時に実行
+## Ollamaの停止 ※ホストのシャットダウン時に実行
 $ cd ~/llm-trial-01
 $ sudo systemctl stop ollama
 
-## 10分後にシャットダウン設定 ※LLMホストのシャットダウン時に実行
+## 10分後にシャットダウン設定 ※ホストのシャットダウン時に実行
 $ cd ~/llm-trial-01
 $ sudo shutdown -h 10
 
-## LLMホスト離脱
+## ホスト離脱
 $ cd ~/llm-trial-01
 $ exit
 ```
@@ -839,19 +835,19 @@ SQL結果: [
 $ cd ~/llm-trial-01
 $ deactivate
 
-## MySQL Serverの停止 ※LLMホストのシャットダウン時に実行
+## MySQL Serverの停止 ※ホストのシャットダウン時に実行
 $ cd ~/llm-trial-01
 $ sudo systemctl stop mysql
 
-## Ollamaの停止 ※LLMホストのシャットダウン時に実行
+## Ollamaの停止 ※ホストのシャットダウン時に実行
 $ cd ~/llm-trial-01
 $ sudo systemctl stop ollama
 
-## 10分後にシャットダウン設定 ※LLMホストのシャットダウン時に実行
+## 10分後にシャットダウン設定 ※ホストのシャットダウン時に実行
 $ cd ~/llm-trial-01
 $ sudo shutdown -h 10
 
-## LLMホスト離脱
+## ホスト離脱
 $ cd ~/llm-trial-01
 $ exit
 ```
